@@ -5,14 +5,15 @@ import {
   Range, 
   RangeKeyDict
 } from 'react-date-range';
+import { Calendar, DateObject } from 'react-multi-date-picker';
+import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 
-import 'react-date-range/dist/styles.css';
-import 'react-date-range/dist/theme/default.css';
-
+import '../../../public/mydatepicker.css';
 interface DatePickerProps {
-  value: Range,
-  onChange: (value: RangeKeyDict) => void;
-  disabledDates?: Date[];
+  value: DateObject | DateObject[] | null,
+  // onChange: (value: Date[]) => false;
+  onChange: (value: DateObject | DateObject[] | null) => false | void;
+  disabledDates?: DateObject[];
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({
@@ -21,15 +22,31 @@ const DatePicker: React.FC<DatePickerProps> = ({
   disabledDates
 }) => {
   return ( 
-    <DateRange
-      rangeColors={['#262626']}
-      ranges={[value]}
-      date={new Date()}
+    //  <DateRange
+    //   rangeColors={['#262626']}
+    //   ranges={[value]}
+    //   date={new Date()}
+    //   onChange={onChange}
+    //   direction="vertical"
+    //   showDateDisplay={false}
+    //   minDate={new Date()}
+    //   disabledDates={disabledDates}
+    // />
+
+    <Calendar 
+      multiple
+      value={value}
       onChange={onChange}
-      direction="vertical"
-      showDateDisplay={false}
-      minDate={new Date()}
-      disabledDates={disabledDates}
+      mapDays={() => {
+        if (disabledDates) return {
+          disabled: true,
+          style: { color: "#ccc" },
+        }
+      }}
+      plugins={[
+        // eslint-disable-next-line react/jsx-key
+        <DatePanel />
+      ]}
     />
    );
 }

@@ -16,6 +16,7 @@ import CountrySelect, {
   CountrySelectValue
 } from "../inputs/CountrySelect";
 import Heading from '../Heading';
+import { DateObject } from 'react-multi-date-picker';
 
 enum STEPS {
   LOCATION = 0,
@@ -34,11 +35,7 @@ const SearchModal = () => {
   const [guestCount, setGuestCount] = useState(1);
   const [roomCount, setRoomCount] = useState(1);
   const [bathroomCount, setBathroomCount] = useState(1);
-  const [dateRange, setDateRange] = useState<Range>({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: 'selection'
-  });
+  const [dateRange, setDateRange] = useState<null | DateObject | DateObject[]>(null);
 
   const Map = useMemo(() => dynamic(() => import('../Map'), { 
     ssr: false 
@@ -71,13 +68,13 @@ const SearchModal = () => {
       bathroomCount
     };
 
-    if (dateRange.startDate) {
-      updatedQuery.startDate = formatISO(dateRange.startDate);
-    }
+    // if (dateRange.startDate) {
+    //   updatedQuery.startDate = formatISO(dateRange.startDate);
+    // }
 
-    if (dateRange.endDate) {
-      updatedQuery.endDate = formatISO(dateRange.endDate);
-    }
+    // if (dateRange.endDate) {
+    //   updatedQuery.endDate = formatISO(dateRange.endDate);
+    // }
 
     const url = qs.stringifyUrl({
       url: '/',
@@ -95,7 +92,7 @@ const SearchModal = () => {
     router, 
     guestCount, 
     roomCount,
-    dateRange,
+    // dateRange,
     onNext,
     bathroomCount,
     params
@@ -140,10 +137,14 @@ const SearchModal = () => {
           title="When do you plan to go?"
           subtitle="Make sure everyone is free!"
         />
-        <Calendar
-          onChange={(value) => setDateRange(value.selection)}
-          value={dateRange}
-        />
+        <div className='flex items-center justify-center'>
+          <Calendar
+            value={dateRange}
+            onChange={(value) => {
+              setDateRange(value)
+            }}
+          />
+        </div>
       </div>
     )
   }
